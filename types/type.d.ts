@@ -15,3 +15,24 @@ declare interface UserProps{
   name:string|undefined,
   profilePicture:string
 }
+declare interface HomeProps{
+  list:Array<any>|[],
+  active:Number|1
+}
+declare interface ItemProps{
+  title:string
+}
+declare interface BottomSheetProps{
+  setShowModal:(boolean)=>any,
+  setBudget:(boolean)=>any,
+  setSubmit:(boolean)=>any,
+  budget:Number,
+}
+declare interface ExpenseProps{
+  monthValue:string,
+    setCurrentDay:any,
+    currentDay:any,
+    dateList:any,
+    setOpenDropDown:(boolean)=>any,
+    openDropDown:boolean,
+}

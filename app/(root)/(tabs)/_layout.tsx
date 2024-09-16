@@ -43,8 +43,13 @@ const styles = StyleSheet.create({
     right: 20,
     borderRadius: 15,
     height: 50,
-    backgroundColor: "rgba( 131, 131, 156, 0.7 )",
-    borderColor: "rgba( 131, 131, 156, 0.5 )",
-    borderWidth: 2,
+    backgroundColor: "#33333F",
+    // borderColor: "",
+    // borderWidth: 2,
+    shadowColor:"white",
+    shadowOffset:{
+      width:20,
+      height:20
+    }
   },
 });

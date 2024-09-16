@@ -8,8 +8,8 @@ function Home({ focused}:TabBarProps) {
   return (
     <AntDesign
       name="home"
-      size={24}
-      color={focused ? "#ffffff" : "#a2a285"}
+      size={focused?30:24}
+      color={focused ? "#ffffff" : "#979899"}
       className=""
     />
   );
@@ -19,8 +19,8 @@ function Budget({ focused }:TabBarProps) {
   return (
     <MaterialCommunityIcons
       name="widgets-outline"
-      size={24}
-      color={focused ? "#ffffff" : "#a2a285"}
+      size={focused?30:24}
+      color={focused ? "#ffffff" : "#979899"}
     />
   );
 }
@@ -29,8 +29,8 @@ function Expense({ focused }:TabBarProps) {
   return (
     <Entypo
       name="wallet"
-      size={24}
-      color={focused ? "#ffffff" : "#a2a285"}
+      size={focused?30:24}
+      color={focused ? "#ffffff" : "#979899"}
     />
   );
 }
@@ -38,17 +38,17 @@ function SharedBudget({ focused }:TabBarProps) {
   return (
     <AntDesign
       name="addusergroup"
-      size={24}
-      color={focused ? "#ffffff" : "#a2a285"}
-    />
-  );
+      size={focused?30:24}
+      color={focused ? "#ffffff" : "#979899"}
+      />
+    );
 }
 function Statistics({ focused }:TabBarProps) {
   return (
     <MaterialIcons
       name="auto-graph"
-      size={24}
-      color={focused ? "#ffffff" : "#a2a285"}
+      size={focused?30:24}
+      color={focused ? "#ffffff" : "#979899"}
     />
   );
 }

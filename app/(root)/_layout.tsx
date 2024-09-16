@@ -10,6 +10,7 @@ export default function Layout() {
     <Stack screenOptions={{headerShown:false}}>
         <Stack.Screen name='(tabs)'/>
         <Stack.Screen name='settings'/>
+        <Stack.Screen name='add-category'/>
     </Stack>:<Redirect href="/(auth)/sign_in"/>
   )
 }

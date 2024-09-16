@@ -1,10 +1,16 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import { View, Text, ScrollView } from "react-native";
+import React from "react";
+import { PieChartView } from "@/components/statistics/PieChartView";
+import BarChartView from '../../../components/statistics/BarChart';
 
-export default function Statistics() {
+export default function StatisticsScreen() {
   return (
-    <View>
-      <Text>Statistics</Text>
-    </View>
-  )
+    <ScrollView
+      contentContainerStyle={{ alignItems: "center" }}
+    >
+      <Text className="text-xl mb-5 text-gray-10 font-JakartaBold">Statistics</Text>
+      <PieChartView />
+      <BarChartView />
+    </ScrollView>
+  );
 }

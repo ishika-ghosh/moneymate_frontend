@@ -1,10 +1,30 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import { ScrollView } from "react-native";
+import React, { useState } from "react";
+import CategorySlider from "@/components/add-expense/CategorySlider";
+import ExpenseInput from "@/components/add-expense/ExpenseInput";
 
-export default function AddExpense() {
+export default function AddExpenseScreen() {
+  const [key, setKey] = useState<number>(0);
+  const [selectedCategory, setSelectedCategory] = useState<any>(null);
+  const [details, setDetails] = useState<any>({
+    desc: "",
+    amt: "",
+  });
+  const handleSubmit = () => {
+    console.log(details, selectedCategory);
+  };
+
   return (
-    <View>
-      <Text>AddExpense</Text>
-    </View>
-  )
+    <ScrollView>
+      <CategorySlider
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
+      />
+      <ExpenseInput
+        details={details}
+        setDetails={setDetails}
+        handleSubmit={handleSubmit}
+      />
+    </ScrollView>
+  );
 }
