@@ -14,12 +14,12 @@ import { ExpenseProps } from "@/types/type";
 export const ExpenseHeader =forwardRef(function (
   {
     monthValue,
-    setCurrentDay,
+    handleDateChange,
     currentDay,
     dateList,
     setOpenDropDown,
     openDropDown,
-  }:ExpenseProps,
+  }:any,
   ref:any
 ) {
   return (
@@ -40,7 +40,7 @@ export const ExpenseHeader =forwardRef(function (
             className="flex flex-row items-center justify-around px-4 bg-gray-100 py-2 w-32 rounded-3xl relative border-[0.5px] border-gray-10"
             onPress={() => setOpenDropDown(!openDropDown)}
           >
-            <Text className="text-lg text-gray-10">{monthValue}</Text>
+            <Text className="text-lg text-gray-10">{monthValue.split(" ")[0]}</Text>
             <AntDesign
               name="down"
               size={10}
@@ -58,7 +58,7 @@ export const ExpenseHeader =forwardRef(function (
             <DateCardItem
               date={item?.date}
               day={item?.day}
-              setCurrentDay={setCurrentDay}
+              handleDateChange={handleDateChange}
               currentDay={currentDay}
             />
           )}
@@ -70,10 +70,10 @@ export const ExpenseHeader =forwardRef(function (
   );
 });
 
-const DateCardItem = ({ date, day, setCurrentDay, currentDay }:any) => (
+const DateCardItem = ({ date, day, handleDateChange, currentDay }:any) => (
   <TouchableOpacity
     onPress={() => {
-      setCurrentDay(date);
+      handleDateChange(date)
     }}
     className={
       currentDay === date
@@ -81,7 +81,7 @@ const DateCardItem = ({ date, day, setCurrentDay, currentDay }:any) => (
         : "bg-gray-100 py-5 px-1 m-1 rounded-3xl flex items-center w-12"
     }
   >
-    <Text className="text-xl font-bold text-gray-10">{date}</Text>
+    <Text className="text-xl font-bold text-gray-10">{date.split("/")[0]}</Text>
     <Text className="font-light text-gray-10">{day}</Text>
   </TouchableOpacity>
 );

@@ -2,36 +2,8 @@ import { PieChart } from "react-native-gifted-charts";
 import { View, Text } from "react-native";
 // import { LinearGradient } from "expo-linear-gradient";
 
-export const PieChartView = () => {
+export const PieChartView = ({pieData,total}:any) => {
   
-  const pieData = [
-    {
-      id: 1,
-      value: 30,
-      color: "#009FFF",
-      focused: true,
-      category: "FOOD",
-    },
-    {
-      id: 2,
-      value: 40,
-      color: "#93FCF8",
-      category: "Transport",
-    },
-    {
-      id: 3,
-      value: 15,
-      color: "#BDB2FA",
-      category: "Flat",
-    },
-    {
-      id: 4,
-      value: 15,
-      color: "#FFA5BA",
-      category: "Electricity",
-    },
-  ];
-  var items = pieData.filter((value) => value.focused === true)[0];
   return (
     <View className="w-full items-center">
       <View
@@ -43,12 +15,10 @@ export const PieChartView = () => {
         </Text>
         <PieChart
           data={pieData}
-          focusedPieIndex={2}
           donut
           showGradient
           sectionAutoFocus
           focusOnPress
-          onPress={(item:any, i:any) => (items = item)}
           showValuesAsLabels
           radius={90}
           innerRadius={60}
@@ -57,28 +27,18 @@ export const PieChartView = () => {
           shadow={true}
           shadowColor="#c1c1cd"
           shadowWidth={2}
-          centerLabelComponent={() => {
-            return (
-              <View
-                style={{
+          centerLabelComponent={()=>
+              <View style={{
                   justifyContent: "center",
                   alignItems: "center",
                   elevation: 10,
-                }}
-              >
-                <Text className="text-gray-10 text-2xl font-bold">
-                  {items?.value}%
-                </Text>
-                <Text className="font-medium text-gray-20 text-md">
-                  {/* {items?.value ? items.value + "%" : null} */}
-                  {items?.category}
-                </Text>
-              </View>
-            );
-          }}
+                }}>
+                  <Text className="text-gray-10">Today</Text>
+                  <Text className="text-gray-10">₹{total}</Text>
+                </View>}
         />
         <View className="w-full pt-3 px-7">
-          {pieData?.map((item) => (
+          {pieData?.map((item:any) => (
             <View
               key={item.id}
               className={

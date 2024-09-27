@@ -1,5 +1,8 @@
 import * as SecureStore from "expo-secure-store"
 import * as Linking from "expo-linking"
+import axios from "axios"
+import { baseUrl } from "@/constants"
+
 export const tokenCache = {
   async getToken(key: string) {
     try {
@@ -29,20 +32,20 @@ export const googleOAuth = async (startOAuthFlow: any) => {
     const { createdSessionId, setActive, signUp } = await startOAuthFlow({
       redirectUrl: Linking.createURL("/(root)/(tabs)/home"),
     });
-    console.log(createdSessionId)
     if (createdSessionId) {
       if (setActive) {
         await setActive({ session: createdSessionId });
-
         if (signUp.createdUserId) {
-          // await fetchAPI("/(api)/user", {
-          //   method: "POST",
-          //   body: JSON.stringify({
-          //     name: `${signUp.firstName} ${signUp.lastName}`,
-          //     email: signUp.emailAddress,
-          //     clerkId: signUp.createdUserId,
-          //   }),
-          // });
+          try {
+            const {data}=await axios.post(`${baseUrl}/user`,
+              {name:`${signUp.firstName} ${signUp.lastName}`,
+              email:signUp.emailAddress,
+              clerkId: signUp.createdUserId})
+
+
+          } catch (error) {
+            console.log(error)
+          }
         }
 
         return {

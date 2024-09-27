@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   View,
   Text,
@@ -6,39 +5,37 @@ import {
   Dimensions,
   StyleSheet,
 } from "react-native";
-import {
+import Animated,{
   useSharedValue,
   useAnimatedScrollHandler,
   FadeInLeft,
-} from "react-native-reanimated";
-import Animated, {
   Extrapolation,
   interpolate,
   useAnimatedStyle,
 } from "react-native-reanimated";
 import { Ionicons } from "@expo/vector-icons";
+import { useUserInfoStore } from "@/store";
+
+
+
 
 const { width: DEVICE_WIDTH, height: DEVICE_HEIGHT } = Dimensions.get("screen");
 const TOTAL_WIDTH = DEVICE_WIDTH * 0.5;
 export const SPACER = (DEVICE_WIDTH - TOTAL_WIDTH) / 2;
+
+
 
 export default function CategorySlider({
   selectedCategory,
   setSelectedCategory,
 }:any) {
   const scrollX = useSharedValue(0);
-
+  const {userCategoryList}=useUserInfoStore();
   const handleScroll = useAnimatedScrollHandler((event) => {
     scrollX.value = event.contentOffset.x;
   }, []);
 
-  const dateList = [
-    { id: 1, name: "" },
-    { id: 2, name: "cleaning" },
-    { id: 3, name: "food" },
-    { id: 5, name: "food" },
-    { id: 4, name: "" },
-  ];
+ 
   return (
     <Animated.View
       className="bg-gray-80 rounded-b-3xl flex flex-col items-center"
@@ -48,10 +45,10 @@ export default function CategorySlider({
       <Text className="text-gray-10 text-3xl font-bold mt-14 w-[70%] mx-auto text-center tracking-widest">
         Add new Expense
       </Text>
-      <View className="h-[50%] w-full mx-auto mt-10">
+      <View className="h-[56%] w-full mx-auto mt-10">
         <Animated.FlatList
           pagingEnabled
-          data={dateList}
+          data={[{_id:0,name:""},...userCategoryList,{_id:2,name:""}]}
           onScroll={handleScroll}
           decelerationRate={"fast"}
           renderItem={({ item, index }) => (
@@ -63,7 +60,7 @@ export default function CategorySlider({
               selectedCategory={selectedCategory}
             />
           )}
-          keyExtractor={(item:any) => item.id}
+          keyExtractor={(item:any) => item._id}
           horizontal={true}
           snapToInterval={TOTAL_WIDTH}
           scrollEventThrottle={16}
@@ -74,6 +71,8 @@ export default function CategorySlider({
     </Animated.View>
   );
 }
+
+
 const RenderItem = ({
   item,
   index,
@@ -81,9 +80,9 @@ const RenderItem = ({
   setSelectedCategory,
   selectedCategory,
 }:any) => {
-  const bgclasses = "w-[80%] rounded-3xl bg-white h-[70%] mb-2";
+  const bgclasses = `w-[80%] rounded-3xl bg-white h-[60%] mb-2 flex items-center justify-center bg-${item.bgColor} ` ;
   const handleSelect = () => {
-    setSelectedCategory(item);
+    setSelectedCategory(item._id);
   };
   if (item.name.length === 0) {
     return <View style={{ width: SPACER }}></View>;
@@ -113,13 +112,15 @@ const RenderItem = ({
       <TouchableOpacity
         className={bgclasses}
         onPress={handleSelect}
-      ></TouchableOpacity>
-      <Text className="text-lg text-gray-10">{item.name}</Text>
-      {selectedCategory?.id === item.id && (
+      >
+        <Text className="text-6xl border-[1px] border-white p-4 rounded-3xl">{item.icon}</Text>
+      </TouchableOpacity>
+      <Text className="text-lg text-gray-10 font-JakartaExtraBold mb-2">{item.name}</Text>
+      {selectedCategory=== item._id && (
         <Ionicons
           name="checkmark-circle"
-          size={24}
-          color="#ff7966"
+          size={30}
+          color="#608bbb"
           style={{ backgroundColor: "white", borderRadius: 50 }}
         />
       )}

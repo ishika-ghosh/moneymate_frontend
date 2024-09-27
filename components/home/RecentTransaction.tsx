@@ -13,16 +13,19 @@ export default function RecentTransaction({ list, active }:HomeProps) {
           <Link href={"/(root)/add-category"} className="bg-primary-100 p-2 rounded-full text-gray-10 font-JakartaBold px-3">Add New</Link>
         </View>
         }
-          <FlatList
+        {list.length>0?
+        <FlatList
             data={list}
             renderItem={({ item }) => (
-              active===1?<Item title={item.title}/>:<CategoryItem/>
+              active===1?<Item item={item}/>:<CategoryItem item={item}/>
             )}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item._id}
             nestedScrollEnabled={true}
             scrollEnabled={false}
-          />
-          {active===2 && <TouchableOpacity
+          />:
+          <Text className="text-gray-30 text-center font-JakartaLight text-lg mt-20">{active===1?"No recent transactions":"No category created by you"}</Text>}
+          
+          {active===2 && list.length>0 && <TouchableOpacity
             className="w-full h-20 my-3 bg-gray-70  border-[1px] border-dotted border-gray-20 flex flex-row items-center px-10 justify-center"
             style={{ borderStyle: "dashed" }}
             onPress={()=>router.push("/(root)/add-category")}
@@ -37,44 +40,54 @@ export default function RecentTransaction({ list, active }:HomeProps) {
   );
 }
 
-const Item = ({title}:ItemProps) => (
+const Item = ({item}:any) => {
+  const bgClassname=`bg-${item.category.bgColor} w-10 h-10 flex justify-center items-center rounded-lg`
+  return(
   <View className="py-2 mb-2 px-3 border-[0.3px] border-gray-40 rounded-lg flex flex-row">
-      <View className="bg-green-600 w-10 h-10 flex justify-center items-center rounded-lg ">
-        <Image
+      <View className={bgClassname}>
+        {/* <Image
           source={images.person}
           className="w-8 h-8 object-contain"
           tintColor={"white"}
-        />
+        /> */}
+        <Text className="text-3xl">{item.category.icon}</Text>
       </View>
     <View className="flex flex-row items-center justify-between basis-5/6">
-      <Text className=" text-gray-10 text-[17px] ml-3">{title}</Text>
-      <Text className=" text-gray-10 font-bold text-[18px]">50000</Text>
+    <View className="ml-3">
+      <Text className=" text-gray-10 text-lg ml-3 font-JakartaBold">{item.category.name}</Text>
+      <Text className=" text-gray-10 text-xs ml-3 font-JakartaLight">{item.desc}</Text>
+
+    </View>
+      <Text className=" text-gray-10 font-bold text-[18px]">₹{item.amount}</Text>
     </View>
   </View>
-);
-const CategoryItem = () => (
+)};
+const CategoryItem = ({item}:any) => {
+  
+  return(
   <View className="px-3 h-auto w-full rounded-xl bg-gray-80 mt-4 flex">
-    <View className="flex flex-row items-center py-1">
-      <Image
-        source={images.person}
-        className="w-8 h-8 basis-1/6"
-        tintColor={"#ffffff"}
-        resizeMode="contain"
-      />
-      <View className="basis-5/6 flex flex-row h-full items-center justify-between px-2">
-        <Text className="text-gray-10 font-semibold text-[16px]">
-          Auto Transport
+    <View className="flex flex-row items-center py-2">
+      
+      <View className="flex flex-row h-full items-center justify-between w-full">
+      <View className="flex flex-row h-full items-center px-3">
+      <View className={`flex items-center justify-center h-12 w-12 rounded-xl bg-${item.bgColor}`}>
+        <Text className="text-center text-3xl ">{item.icon}</Text>
+      </View>
+        <Text className="text-gray-10 text-lg ml-4 font-JakartaSemiBold">
+          {item.name}
         </Text>
-        <View className="mt-3 flex justify-center items-center">
-          <Text className="text-gray-10 font-bold text-[20px]">₹3000</Text>
-          <Text className="text-gray-20 font-medium text-[12px]">of 4000</Text>
-        </View>
+
+      </View>
+      {/* {item.budget>0 && <View className="basis-1/2 mt-3 flex justify-center items-end pr-3">
+        <Text className="text-gray-10 font-bold text-[20px] text-center">₹ 0</Text>
+        <Text className="text-gray-20 font-medium text-[12px]">of  ₹{item.budget}</Text>
+      </View>} */}
       </View>
     </View>
-    <View className=" w-full h-2 bg-gray-40 opacity-30 rounded-lg mb-2">
+    {/* {item.budget>0 && <View className=" w-full h-2 bg-gray-40 opacity-30 rounded-lg mb-2">
       <View
         className={`absolute left-0 w-[${25}%] h-2 bg-[${"#00f9d9"}] rounded-lg `}
       />
-    </View>
+    </View>} */}
   </View>
-);
+)}

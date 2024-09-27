@@ -6,8 +6,8 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
-  Image,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import { useState } from "react";
 import axios from "axios";
@@ -15,15 +15,24 @@ import { Entypo } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import BottomSheet from "../BottomSheet";
 import CustomButton from "../CustomButton";
+import { router } from "expo-router";
+import { useUserInfoStore } from "@/store";
+import Loading from "../Loading";
+import { useAuth } from "@clerk/clerk-expo";
+import { baseUrl } from "@/constants";
 
 export default function AddCategoryForm() {
-  const [bgColor, setBgColor] = useState("pink-500");
+  const {setCategoryList,userCategoryList}=useUserInfoStore()
+  const {getToken}=useAuth();
+  const [bgColor, setBgColor] = useState("primary-100");
   const [icon, setIcon] = useState("🙂");
   const [catName, setCatname] = useState("");
   const [loading, setLoading] = useState(false);
+  const [submitLoading, setSubmitLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [submit, setSubmit] = useState(false);
   const [budget, setBudget] = useState(0);
+  const [input, setInput] = useState(String(budget));
 
   const handlePress = () => {
     setLoading(true);
@@ -50,22 +59,46 @@ export default function AddCategoryForm() {
         }
       )
       .then((res) => {
-        setIcon(res.data.result.trim());
+        const icon=String(res.data.result.trim())
+        setIcon(icon)
         setLoading(false);
         setShowModal(true);
       })
       .catch((err) => console.log(err));
   };
-  const handleSubmit = () => {
+  const handleSubmit = async() => {
+    const token=await getToken();
     const catData = {
       name: catName,
       icon: icon,
       budget: budget,
       bgColor: bgColor,
     };
-    console.log(catData);
+    setSubmitLoading(true);
+    try {
+    const {data:{data}}= await axios.post(`${baseUrl}/category`,catData,{
+      headers:{
+        Authorization:`bearer ${token}`
+      }
+    })
+    const newList=[...userCategoryList,data]
+    setCategoryList({categoryList:newList})
+    console.log("created category successfully");
+    setSubmitLoading(false);
+    router.push("/(root)/(tabs)/home")
+      
+    } catch (error) {
+      console.log(error)
+      Alert.prompt("oops!","something went wrong .please try again later")
+      setSubmitLoading(false)
+    }
+    setBgColor("pink-500");
+    setCatname("");
+    setIcon("🙂")
+    setBudget(0);
   };
   return (
+    submitLoading?<Loading/>:
     <KeyboardAvoidingView
       className="w-full flex-1 items-center"
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -115,13 +148,6 @@ export default function AddCategoryForm() {
                         textVariant="primary" 
                         onPress={handlePress} 
                         className="border-[0.5px] border-primary-100 mt-5 rounded-xl"/>}
-            {/* <TouchableOpacity
-            className="mr-2"
-            onPress={handlePress}
-            disabled={catName.length === 0}
-          >
-            <Entypo name="arrow-bold-right" size={30} color="white" />
-          </TouchableOpacity> */}
         </View>
 
         {budget > 0 && (
@@ -147,11 +173,43 @@ export default function AddCategoryForm() {
       </ScrollView>
         {showModal && (
           <BottomSheet
-            setShowModal={setShowModal}
-            budget={budget}
-            setBudget={setBudget}
-            setSubmit={setSubmit}
+            setShowModal={()=>setShowModal(false)}
+            title="Whould You like to add a monthly plan for this category?"
+          >
+            <TextInput
+            className="text-md border-gray-10 text-gray-10 border-[1px] p-2 rounded-xl w-full mt-3"
+            keyboardType="numeric"
+            placeholder="Add Budget"
+            placeholderTextColor={"white"}
+            onChangeText={(e) => setInput(e)}
+            value={input}
           />
+          <TouchableOpacity
+            className="mt-2 py-3 w-full border-[1px] rounded-3xl border-primary-100"
+            onPress={() => {
+              setShowModal(false);
+              setSubmit(true);
+            }}
+          >
+            <Text className="text-center text-primary-100 text-lg font-bold">
+              Skip It For Now
+            </Text>
+          </TouchableOpacity>
+          {input.length > 0 && (
+            <TouchableOpacity
+              className="mt-2 py-3 w-full border-[1px] rounded-3xl border-primary-100 bg-primary-100"
+              onPress={() => {
+                setBudget(Number(input));
+                setShowModal(false);
+                setSubmit(true);
+              }}
+            >
+              <Text className="text-center text-gray-10 text-lg font-bold">
+                Add Budget
+              </Text>
+            </TouchableOpacity>
+          )}
+          </BottomSheet>
         )}
     </KeyboardAvoidingView>
   );
