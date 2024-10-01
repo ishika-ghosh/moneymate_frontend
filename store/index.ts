@@ -10,6 +10,7 @@ export const useUserInfoStore=create<any>((set)=>({
     userExpenseList:[],
     pieChartData:[],
     barChartData:[],
+    userSharedBudget:[],
     todaysTotal:0,
     setUserInfo:({name,email,imageUrl,createdAt}:any)=>{
         set(()=>({
@@ -37,5 +38,8 @@ export const useUserInfoStore=create<any>((set)=>({
             barChartData:barchartData,
             todaysTotal:total
         }))
+    },
+    setSharedBudgetList:(list:any)=>{
+        set(()=>({userSharedBudget:list}))
     }
 }))

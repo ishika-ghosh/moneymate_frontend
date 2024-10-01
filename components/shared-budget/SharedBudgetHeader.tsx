@@ -10,7 +10,7 @@ export default function SharedBudgetHeader() {
       </Text>
       <TouchableOpacity
         className="p-2 rounded-xl bg-primary-100 mt-4"
-        onPress={() =>router.push("/(root)/(tabs)/add-expense")}
+        onPress={() =>router.push("/(root)/null")}
       >
         <Text className="font-medium text-gray-10">
           Create a Budget with your friends

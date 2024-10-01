@@ -1,4 +1,4 @@
-import { View, Text,StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { Home,Expense,SharedBudget,AddExpense,Statistics } from '@/components/TabIcons';
 import CustomTabBarButton from '@/components/TabIcons';
 import { Tabs } from 'expo-router'
@@ -44,8 +44,6 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     height: 50,
     backgroundColor: "#33333F",
-    // borderColor: "",
-    // borderWidth: 2,
     shadowColor:"white",
     shadowOffset:{
       width:20,

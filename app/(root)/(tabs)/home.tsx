@@ -14,7 +14,19 @@ import { baseUrl } from '../../../constants/index';
 export default function RootHome() {
   const { user } = useUser();
   const {getToken}=useAuth()
-  const {setUserInfo,setCategoryList,setExpenseList,userName,userCategoryList,userImageUrl,userExpenseList,setPieChartData,pieChartData,todaysTotal,userCreatedAt}=useUserInfoStore()
+  const {setUserInfo,
+        setCategoryList,
+        setExpenseList,
+        userName,
+        userCategoryList,
+        userImageUrl,
+        userExpenseList,
+        setPieChartData,
+        pieChartData,
+        todaysTotal,
+        userCreatedAt,
+        setSharedBudgetList,
+        }=useUserInfoStore()
   const [active, setActive] = useState<Number>(1);
   const [loading,setLoading]=useState<boolean>(false)
 
@@ -35,10 +47,12 @@ export default function RootHome() {
     try {
       const {data:{data}}=await API.get(`/category`)
       const {data:expenseData}=await API.get(`/expenses`)
+      const {data:sharedData}=await API.get(`/shared`)
       const {data:{data:{scaledData,totalSum},barChartData}}=await API.get(`/analytics?startdate=${userCreatedAt}`)
       setCategoryList({categoryList:data})
       setExpenseList({expenseList:expenseData.reverse()})
       setPieChartData({list:scaledData,total:totalSum,barchartData:barChartData})
+      setSharedBudgetList(sharedData)
     } catch (error) {
       console.log(error)
     }
