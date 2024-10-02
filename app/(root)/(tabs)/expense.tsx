@@ -17,10 +17,8 @@ import CustomButton from "@/components/CustomButton";
 export default function ExpenseScreen() {
   const {getToken}=useAuth()
   const {userCreatedAt,userExpenseList,setExpenseList,setPieChartData,}=useUserInfoStore()
-  const startDate = moment(userCreatedAt,"DD/MM/YYYY");
-  const monthList = Array.from({ length: moment().diff(startDate, 'months') + 1 }, (_, i) =>
-    startDate.clone().add(i, 'months').format("MMMM YYYY")
-);
+  const startDate = String(moment(userCreatedAt,"DD/MM/YYYY"));
+  const monthList=getMonthsBetweenDates(startDate)
   const [expenseList,setLocalExpenseList]=useState<Array<any>>(userExpenseList)
   const [months, setMonths] = useState<any>(monthList.reverse());
   const [dateList, setDateList] = useState<any>([]);
@@ -33,7 +31,6 @@ export default function ExpenseScreen() {
   const flatListRef = useRef<any>(null);
   useEffect(() => {
     const list = getDateList(monthValue,userCreatedAt);
-    // const list=getDatesFromStartOfMonth(monthValue,userCreatedAt)
     setLocalExpenseList(userExpenseList)
     setDateList(list);
     setCurrentDay(list[0].date);
@@ -126,7 +123,6 @@ export default function ExpenseScreen() {
       <ScrollView className="mb-12" nestedScrollEnabled={true}>
         <ExpenseHeader
           monthValue={monthValue}
-          // setMonthValue={setMonthValue}
           currentDay={currentDay}
           handleDateChange={(date:any)=>fetchExpenses(date)}
           dateList={dateList}
@@ -153,7 +149,7 @@ export default function ExpenseScreen() {
           <Animated.View
             entering={FadeIn}
             exiting={FadeOut}
-            className="absolute w-32 h-auto bg-gray-100 top-[18%] left-[60%] rounded-3xl border-[0.5px] border-gray-20"
+            className="absolute w-32 h-auto bg-gray-100 top-[48%] left-[60%] rounded-xl border-[0.5px] border-gray-20"
           >
             {months.map((month:string, i:number) => (
               <TouchableOpacity
@@ -213,41 +209,33 @@ const getDateList = (month:string,startDate:string) => {
     const days = [];
     for (let i = daysInMonth; i >= 1; i--) {
       const date = moment(`${month}-${i}`, "MMMM-D");
-      days.push({
-        date: date.format("DD/MM/YYYY"),
-        day: date.format("ddd"),
-      });
+      if(date.isSameOrAfter(start)){
+        days.push({
+          date: date.format("DD/MM/YYYY"),
+          day: date.format("ddd"),
+        });
+
+      }
     }
 
     return days;
   }
 };
-// function getDatesFromStartOfMonth(monthYear:string, startDate:string) {
-//   const start = moment(startDate, "DD/MM/YYYY");   // Start date
-//   const monthStart = moment(monthYear, "MMMM YYYY"); // Given month
-//   const today = moment(new Date());
-//   console.log(today.format('DD/MM/YYYY'))
-//   // console.log(new Date().getDate())
-//   // If the start date is after today's date or after the last date of the given month, return an empty array
-//   if (start.isAfter(today) || start.isAfter(monthStart.endOf('month'))) {
-//     return [];
-//   }
 
-//   const result = [];
-//   const daysInMonth = monthStart.daysInMonth();
-//   // Loop through all days of the given month, but not beyond today
-//   for (let day = 1; day <= daysInMonth; day++) {
-//     const currentDay = monthStart.clone().date(day);
-//     console.log(currentDay.isSameOrBefore(today),currentDay.format('DD/MM/YYYY'))
-//     // Only consider days after the start date and not beyond today
-//     if (currentDay.isAfter(start) && currentDay.isSameOrBefore(today)) {
-//       result.push({
-//         date: currentDay.format("DD/MM/YYYY"),
-//         day: currentDay.format("ddd")
-//       });
-//     }
-//   }
-//   return result.reverse();
-// }
+function getMonthsBetweenDates(startDate:string) {
+  const start = new Date(startDate);
+  const end = new Date();
+  const months = [];
+  while (start <= end) {
+    const month = start.toLocaleString('default', { month: 'long' });
+    const year = start.getFullYear();
+    months.push(`${month} ${year}`);
+    start.setMonth(start.getMonth() + 1);
+    start.setDate(1)
+  }
+
+  return months;
+}
+
 
 
