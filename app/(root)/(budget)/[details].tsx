@@ -29,6 +29,8 @@ export default function SharedBudgetDetails() {
     user:"",
     share:""
   }])
+  const [analysis,setAnalysis]=useState([])
+
   const handleSubmit=async()=>{
     let paidForList;
     const token=await getToken()
@@ -103,11 +105,14 @@ export default function SharedBudgetDetails() {
   const handleAnalysis=async()=>{
       const token=await getToken()
       try {
+        setLoading(true)
         const {data}=await axios.get(`${baseUrl}/shared/analysis/${details}`,{headers:{Authorization:`bearer ${token}`}})
-        console.log(data)
+        setAnalysis(data)
+        
       } catch (error) {
         console.log(error)
       }
+      setLoading(false)
   }
   useEffect(()=>{
       fetchExpenses()
@@ -115,7 +120,7 @@ export default function SharedBudgetDetails() {
   
   return (
     loading?<Loading/>:
-    <>
+    !modal?
     <ScrollView className='px-4'>
       <Text className='text-gray-20 font-JakartaBold text-xl text-center mt-2'>{selectedBudget?.name}</Text>
       <Text className='text-gray-30 font-JakartaLight text-sm text-center mt-2'>Created At: {moment(selectedBudget?.createdAt).format('DD-MM-YYYY')}</Text>
@@ -131,9 +136,23 @@ export default function SharedBudgetDetails() {
         :<Text className='text-gray-30 text-lg font-JakartaLight text-center mt-6'>No Expenses in this budget</Text>
       }
       <CustomButton title='Get The Analysis' className='mt-3 rounded-xl mb-10 border-[0.5px] border-gray-20' bgVariant='secondary' onPress={handleAnalysis}/>
-    </ScrollView>
-      {modal && 
-      <ScrollView className='w-full h-screen absolute top-0 left-0 bg-gray-80'>
+      {analysis.length>0 && 
+      <View className='bg-gray-70 absolute top-0 left-0 w-full h-auto pb-20'>
+        <View className='w-full px-2 flex items-end'>
+          <Pressable onPress={()=>setAnalysis([])}>
+            <Entypo name="cross" size={30} color="white" />
+          </Pressable>
+        </View>
+        <Text className='text-gray-20 text-xl text-center font-JakartaSemiBold mb-3'>Analysis</Text>
+        {
+          analysis.map((item:any,index)=>(
+            <AnalysisItem item={item} key={index}/>
+          ))
+        }
+      </View>}
+    </ScrollView>:
+
+      <ScrollView className='w-full h-screen bg-gray-80'>
         <View className='w-full p-2 flex items-end'>
           <Pressable onPress={()=>setModal(false)}>
             <Entypo name="cross" size={30} color="white" />
@@ -222,8 +241,6 @@ export default function SharedBudgetDetails() {
         </KeyboardAvoidingView>
       </ScrollView>
       
-      }
-      </>
   )
 }
 
@@ -251,3 +268,21 @@ const ExpenseItem=({item,handleDelete}:any)=>(
     </View>
   </View>
 )
+
+const AnalysisItem=({item}:any)=>{
+  return (
+    <View className='px-3 my-3'>
+      <Text className='text-gray-10 text-lg font-JakartaMedium'>For :{item.creditor}</Text>
+      {item.selfExpense>0 && <Text className='text-gray-20 text-md font-JakartaLight mt-2'>Your total Expense for yourself {" "} <Text className='font-JakartaBold'>₹{item.selfExpense}</Text></Text>}
+      {item.totalExpense>0 && <Text className='text-gray-20 text-md font-JakartaLight mt-2'>You have total spent in this budget {" "}<Text className='font-JakartaBold'>₹{item.totalExpense}</Text></Text>}
+      {
+        item.debtors.map((debtor:any,index:number)=>(
+          <Text className='mt-2 text-gray-20 font-JakartaLight'>
+            <Text className='font-JakartaBold'>{debtor.debtor}</Text>{" "} will give you {" "}
+            <Text className='font-JakartaBold'>₹{debtor.amount}</Text>
+          </Text>
+        ))
+      }
+    </View>
+  )
+}
