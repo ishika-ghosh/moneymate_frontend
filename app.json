@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "moneymate_latest",
-    "slug": "moneymate_latest",
+    "name": "moneymate",
+    "slug": "moneymate",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -21,7 +21,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#000000"
       },
-      "package": "com.ishikaghosh.moneymate_latest"
+      "package": "com.ishikaghosh.moneymate"
     },
     "web": {
       "bundler": "metro",
@@ -36,7 +36,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "d686c8a0-8d42-472f-ab21-92702e81be55"
+        "projectId": "79fcd636-1343-4192-8828-3070e4ee7d71"
       }
     }
   }
