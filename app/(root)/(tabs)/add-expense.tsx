@@ -1,4 +1,4 @@
-import { Alert, ScrollView } from "react-native";
+import { Alert, ScrollView ,View,Text} from "react-native";
 import React, { useState } from "react";
 import CategorySlider from "@/components/add-expense/CategorySlider";
 import ExpenseInput from "@/components/add-expense/ExpenseInput";
@@ -10,9 +10,10 @@ import Loading from "@/components/Loading";
 import { baseUrl } from "@/constants";
 
 
+
 export default function AddExpenseScreen() {
   const {getToken}=useAuth();
-  const {userExpenseList,setExpenseList,setPieChartData,userCreatedAt}=useUserInfoStore()
+  const {userExpenseList,setExpenseList,setPieChartData,userCreatedAt,userCategoryList}=useUserInfoStore()
   const [selectedCategory, setSelectedCategory] = useState<any>(null);
   const [details, setDetails] = useState<any>({
     desc: "",
@@ -52,7 +53,7 @@ export default function AddExpenseScreen() {
 
   return (
     loading?<Loading/>:
-    <ScrollView>
+    (userCategoryList.length>0?<ScrollView>
       <CategorySlider
         selectedCategory={selectedCategory}
         setSelectedCategory={setSelectedCategory}
@@ -62,6 +63,9 @@ export default function AddExpenseScreen() {
         setDetails={setDetails}
         handleSubmit={handleSubmit}
       />
-    </ScrollView>
+    </ScrollView>:
+    <View className="flex-1 items-center justify-center px-4">
+      <Text className="text-center text-gray-20 font-JakartaSemiBold text-lg">You may add the category first inorder to add expenses</Text>
+    </View>)
   );
 }

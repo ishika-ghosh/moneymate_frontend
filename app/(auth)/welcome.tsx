@@ -16,7 +16,7 @@ export default function Onboarding() {
               </Text>
             </View>
             <Text className="text-md font-JakartaSemiBold text-center text-[#858585] mx-10 mt-3">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum, earum ullam dicta ipsam fugiat veritatis 
+              Track personal and shared expenses effortlessly, with detailed analysis and easy group expense settlements. 
             </Text>
       
 

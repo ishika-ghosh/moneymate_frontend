@@ -6,7 +6,7 @@ export default function AddCategory() {
   return (
     < >
     <View>
-        <Text className='text-gray-20 font-JakartaExtraBold text-center text-xl my-5'>Add Your New Expense Category</Text>
+        <Text className='text-gray-10 font-JakartaExtraBold text-center text-xl my-5'>Add Your New Expense Category</Text>
     </View>
         <AddCategoryForm/>
 

@@ -53,9 +53,7 @@ export default function HomeStatistics({category,total}:any) {
       </>:
       <View className="px-5">
         <Text className="text-2xl font-JakartaBold text-gray-10 text-center mt-10">Welcome to MoneyMate</Text>
-        <Text className="p-4 text-center text-gray-20 mt-2 mb-9">Lorem ipsum dolor sit amet consectetur adipisicing 
-          elit. Soluta temporibus molestiae animi pariatur voluptates minus aliquid provident non explicabo impedit 
-          voluptatum, possimus ratione veniam, perspiciatis eos blanditiis maiores ipsam laboriosam!</Text>
+        <Text className="p-4 text-center text-gray-20 mt-2 mb-9">Start by creating a category to organize your expenses. Add your expenses and track them with detailed daily and monthly statistical analysis. For shared budgets, manage group expenses seamlessly and get automatic calculations on how much each person owes.</Text>
       </View>}
     </View>
   );

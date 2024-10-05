@@ -1,7 +1,6 @@
 import { View, Text, FlatList, Image, TouchableOpacity } from "react-native";
 import { Link, router } from "expo-router";
-import { HomeProps, ItemProps } from "@/types/type";
-import { images } from "@/constants";
+import { HomeProps} from "@/types/type";
 import { AntDesign } from "@expo/vector-icons";
 
 export default function RecentTransaction({ list, active }:HomeProps) {
@@ -41,15 +40,9 @@ export default function RecentTransaction({ list, active }:HomeProps) {
 }
 
 const Item = ({item}:any) => {
-  const bgClassname=`bg-${item.category.bgColor} w-10 h-10 flex justify-center items-center rounded-lg`
   return(
   <View className="py-2 mb-2 px-3 border-[0.3px] border-gray-40 rounded-lg flex flex-row">
-      <View className={bgClassname}>
-        {/* <Image
-          source={images.person}
-          className="w-8 h-8 object-contain"
-          tintColor={"white"}
-        /> */}
+      <View className="bg-gray-70 w-10 h-10 flex justify-center items-center rounded-lg">
         <Text className="text-3xl">{item.category.icon}</Text>
       </View>
     <View className="flex flex-row items-center justify-between basis-5/6">
@@ -70,7 +63,7 @@ const CategoryItem = ({item}:any) => {
       
       <View className="flex flex-row h-full items-center justify-between w-full">
       <View className="flex flex-row h-full items-center px-3">
-      <View className={`flex items-center justify-center h-12 w-12 rounded-xl bg-${item.bgColor}`}>
+      <View className={`flex items-center justify-center h-12 w-12 rounded-xl bg-gray-70`}>
         <Text className="text-center text-3xl ">{item.icon}</Text>
       </View>
         <Text className="text-gray-10 text-lg ml-4 font-JakartaSemiBold">
@@ -78,16 +71,7 @@ const CategoryItem = ({item}:any) => {
         </Text>
 
       </View>
-      {/* {item.budget>0 && <View className="basis-1/2 mt-3 flex justify-center items-end pr-3">
-        <Text className="text-gray-10 font-bold text-[20px] text-center">₹ 0</Text>
-        <Text className="text-gray-20 font-medium text-[12px]">of  ₹{item.budget}</Text>
-      </View>} */}
       </View>
     </View>
-    {/* {item.budget>0 && <View className=" w-full h-2 bg-gray-40 opacity-30 rounded-lg mb-2">
-      <View
-        className={`absolute left-0 w-[${25}%] h-2 bg-[${"#00f9d9"}] rounded-lg `}
-      />
-    </View>} */}
   </View>
 )}

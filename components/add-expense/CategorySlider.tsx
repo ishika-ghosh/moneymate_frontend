@@ -80,7 +80,6 @@ const RenderItem = ({
   setSelectedCategory,
   selectedCategory,
 }:any) => {
-  const bgclasses = `w-[80%] rounded-3xl bg-white h-[60%] mb-2 flex items-center justify-center bg-${item.bgColor} ` ;
   const handleSelect = () => {
     setSelectedCategory(item._id);
   };
@@ -110,7 +109,7 @@ const RenderItem = ({
       className="flex flex-col items-center justify-center"
     >
       <TouchableOpacity
-        className={bgclasses}
+        className={"w-[80%] rounded-3xl h-[60%] mb-2 flex items-center justify-center bg-gray-70"}
         onPress={handleSelect}
       >
         <Text className="text-6xl border-[1px] border-white p-4 rounded-3xl">{item.icon}</Text>

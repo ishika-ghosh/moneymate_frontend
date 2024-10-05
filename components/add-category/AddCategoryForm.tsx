@@ -24,15 +24,11 @@ import { baseUrl } from "@/constants";
 export default function AddCategoryForm() {
   const {setCategoryList,userCategoryList}=useUserInfoStore()
   const {getToken}=useAuth();
-  const [bgColor, setBgColor] = useState("primary-100");
-  const [icon, setIcon] = useState("🙂");
+  const [icon, setIcon] = useState("💰");
   const [catName, setCatname] = useState("");
   const [loading, setLoading] = useState(false);
   const [submitLoading, setSubmitLoading] = useState(false);
-  const [showModal, setShowModal] = useState(false);
   const [submit, setSubmit] = useState(false);
-  const [budget, setBudget] = useState(0);
-  const [input, setInput] = useState(String(budget));
 
   const handlePress = () => {
     setLoading(true);
@@ -60,9 +56,11 @@ export default function AddCategoryForm() {
       )
       .then((res) => {
         const icon=String(res.data.result.trim())
-        setIcon(icon)
+        const emojiRegex = /([\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F700}-\u{1F77F}]|[\u{1F900}-\u{1F9FF}]|[\u{1FA00}-\u{1FA6F}]|[\u{1F100}-\u{1F1FF}]|[\u{1F200}-\u{1F2FF}]|[\u{1F400}-\u{1F4FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]|[\u{2B50}]|[\u{231A}]|[\u{23F0}]|[\u{23F3}]|[\u{24C2}]|[\u{25AA}]|[\u{25AB}]|[\u{25B6}]|[\u{25C0}]|[\u{2934}]|[\u{2935}]|[\u{3297}]|[\u{3299}]|[\u{303D}]|[\u{00A9}]|[\u{00AE}]|[\u{203C}]|[\u{2049}]|[\u{2122}]|[\u{2139}]|[\u{2194}-\u{21AA}]|[\u{2B06}-\u{2B07}]|[\u{2934}-\u{2935}]|[\u{25B6}-\u{25C0}]|[\u{2600}-\u{26FF}]|[\u{1F004}]|[\u{1F0CF}])/gu;
+        const match = icon.match(emojiRegex);
+        setIcon(match ? match[0] : "")
         setLoading(false);
-        setShowModal(true);
+        setSubmit(true)
       })
       .catch((err) => console.log(err));
   };
@@ -71,8 +69,6 @@ export default function AddCategoryForm() {
     const catData = {
       name: catName,
       icon: icon,
-      budget: budget,
-      bgColor: bgColor,
     };
     setSubmitLoading(true);
     try {
@@ -82,31 +78,27 @@ export default function AddCategoryForm() {
       }
     })
     const newList=[...userCategoryList,data]
-    setCategoryList({categoryList:newList})
-    console.log("created category successfully");
-    setSubmitLoading(false);
+    setCategoryList({categoryList:newList})  
     router.push("/(root)/(tabs)/home")
       
     } catch (error) {
       console.log(error)
       Alert.prompt("oops!","something went wrong .please try again later")
-      setSubmitLoading(false)
     }
-    setBgColor("pink-500");
     setCatname("");
-    setIcon("🙂")
-    setBudget(0);
+    setIcon("💰")
+    setSubmitLoading(false);
   };
   return (
     submitLoading?<Loading/>:
     <KeyboardAvoidingView
-      className="w-full flex-1 items-center"
+      className="w-full items-center mt-3"
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <ScrollView contentContainerStyle={{ flex: 1,alignItems:"center" }}>
-        <View className="w-[80%] basis-1/3 mx-3 bg-gray-80 rounded-2xl flex items-center h-full">
+
+        <View className="w-[80%] pb-7 bg-gray-80 rounded-2xl flex items-center">
           <View
-            className={`w-16 h-16 flex items-center justify-center mt-10 bg-${bgColor} rounded-full border-[3px] border-white overflow-hidden`}
+            className={`w-16 h-16 flex items-center justify-center mt-7 bg-gray-70 rounded-full border-[3px] border-white overflow-hidden`}
           >
             {loading ? (
               <ActivityIndicator color={"white"}/>
@@ -114,103 +106,28 @@ export default function AddCategoryForm() {
               <Text className="text-2xl">{icon}</Text>
             )}
           </View>
-          <View className="w-full flex flex-row items-center justify-between px-5 mt-10">
-            <TouchableOpacity
-              className="w-9 h-9 bg-primary-100 rounded-3xl border-[2px] border-white"
-              onPress={() => setBgColor("primary-100")}
-            />
-            <TouchableOpacity
-              className="w-9 h-9 bg-primary-200 rounded-3xl border-[2px] border-white"
-              onPress={() => setBgColor("primary-200")}
-            />
-            <TouchableOpacity
-              className="w-9 h-9 bg-primary-300 rounded-3xl border-[2px] border-white"
-              onPress={() => setBgColor("primary-300")}
-            />
-            <TouchableOpacity
-              className="w-9 h-9 bg-primary-400 rounded-3xl border-[2px] border-white"
-              onPress={() => setBgColor("primary-400")}
-            />
-          </View>
-        </View>
-        <View className="w-full items-center mt-5 flex-col px-7 justify-around">
+            <Text className="text-gray-20 mt-3 text-lg font-JakartaBold">Category</Text>
           <TextInput
-            className="text-md border-gray-10 text-gray-10 border-[1px] mx-3 p-3 w-full rounded-xl"
+            className="text-md border-gray-10 text-gray-10 border-[1px] px-3 w-[80%] rounded-lg mt-10 py-2"
             placeholder="Category Name"
             placeholderTextColor={"white"}
             onChangeText={(e) =>{ setCatname(e); setSubmit(false)}}
             value={catName}
           />
-          {catName.length>0 && !submit &&
-          <CustomButton title="Ready to Add" 
+          {catName.length>0 && (!submit ?
+                  <CustomButton title="Ready to Add" 
                         IconRight={()=><Entypo name="arrow-bold-right" size={30} color="#608bbb" />} 
                         bgVariant="secondary"
                         textVariant="primary" 
                         onPress={handlePress} 
-                        className="border-[0.5px] border-primary-100 mt-5 rounded-xl"/>}
+                        className="border-[0.5px] border-primary-100 mt-5 rounded-xl w-[80%]"/>:
+                  <CustomButton title="Submit" 
+                        onPress={handleSubmit} 
+                        className="mt-5 mx-3 p-2 bg-primary-100 w-[80%] rounded-lg z-1"/>            
+                      )               
+          }
         </View>
 
-        {budget > 0 && (
-          <View className="mt-5 mx-3 p-2 w-[80%] rounded-lg border-[1px] border-gray-50 flex-row items-center justify-between ">
-            <Text className="text-center text-gray-10 text-lg font-bold">
-              Monthly Plan : ₹ {budget}
-            </Text>
-            <TouchableOpacity onPress={() => setShowModal(true)}>
-              <AntDesign name="edit" size={24} color="white" />
-            </TouchableOpacity>
-          </View>
-        )}
-        {submit && (
-          <TouchableOpacity
-            className="mt-5 mx-3 p-2 bg-primary-100 w-[80%] rounded-lg z-1"
-            onPress={handleSubmit}
-          >
-            <Text className="text-center font-semibold text-gray-10 text-lg">
-              Submit
-            </Text>
-          </TouchableOpacity>
-        )}
-      </ScrollView>
-        {showModal && (
-          <BottomSheet
-            setShowModal={()=>setShowModal(false)}
-            title="Whould You like to add a monthly plan for this category?"
-          >
-            <TextInput
-            className="text-md border-gray-10 text-gray-10 border-[1px] p-2 rounded-xl w-full mt-3"
-            keyboardType="numeric"
-            placeholder="Add Budget"
-            placeholderTextColor={"white"}
-            onChangeText={(e) => setInput(e)}
-            value={input}
-          />
-          <TouchableOpacity
-            className="mt-2 py-3 w-full border-[1px] rounded-3xl border-primary-100"
-            onPress={() => {
-              setShowModal(false);
-              setSubmit(true);
-            }}
-          >
-            <Text className="text-center text-primary-100 text-lg font-bold">
-              Skip It For Now
-            </Text>
-          </TouchableOpacity>
-          {input.length > 0 && (
-            <TouchableOpacity
-              className="mt-2 py-3 w-full border-[1px] rounded-3xl border-primary-100 bg-primary-100"
-              onPress={() => {
-                setBudget(Number(input));
-                setShowModal(false);
-                setSubmit(true);
-              }}
-            >
-              <Text className="text-center text-gray-10 text-lg font-bold">
-                Add Budget
-              </Text>
-            </TouchableOpacity>
-          )}
-          </BottomSheet>
-        )}
     </KeyboardAvoidingView>
   );
 }

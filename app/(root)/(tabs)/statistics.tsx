@@ -16,7 +16,7 @@ export default function StatisticsScreen() {
     const transformedBarChatData=barChartData.map((item:any, index:any)=>({
           id: index + 1,
           frontColor: "#91E3E3",
-          value: Math.round(item?.totalAmount/1000),
+          value: Math.round(item?.totalAmount),
           amount:item?.totalAmount,
           sideColor: colors[index % colors.length],
           label: `${item.month.trim()}`
@@ -37,6 +37,7 @@ export default function StatisticsScreen() {
       contentContainerStyle={{ alignItems: "center" }}
     >
       <Text className="text-xl mb-5 text-gray-10 font-JakartaBold">Statistics</Text>
+      {formatedBarChartData.length===0 && formedPieChatData.length===0 && <Text className="text-center text-gray-20 font-JakartaSemiBold text-lg mt-2">No Analysis to show</Text>}
       {formedPieChatData.length>0 && <PieChartView pieData={formedPieChatData} total={todaysTotal}/>}
       {formatedBarChartData.length>0 && <BarChartView barData={formatedBarChartData}/>}
     </ScrollView>

@@ -45,10 +45,9 @@ export default function ExpenseList({expenseList,deleteItem,updateItem}:any) {
 }
 
 const ExpenseItems = ({item}:any) => {
-  const className=`bg-${item.category.bgColor} w-10 h-10 flex justify-center items-center rounded-full`
   return (
     <View className="bg-gray-100 py-4 mb-2 pl-3 border-[0.3px] border-gray-40 rounded-lg flex flex-row items-center justify-between z-0">
-      <View className={className}>
+      <View className={"bg-gray-70 w-10 h-10 flex justify-center items-center rounded-full"}>
         <Text className="text-xl">{item.category.icon}</Text>
       </View>
       <View className="flex flex-row items-center justify-between basis-5/6 px-2 pr-5">
